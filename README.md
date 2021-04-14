@@ -10,7 +10,7 @@
 
 ## Tecnologias
 - [styled-components](https://styled-components.com/)
-- [mijagejs](https://miragejs.com/)
+- [miragejs](https://miragejs.com/)
 - [react-modal](https://github.com/reactjs/react-modal)
 - [git-commit-msg-linter](https://github.com/legend80s/commit-msg-linter#readme)
 
