@@ -1,11 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../services/api";
 import { Container } from "./styles";
 
+interface Transaction {
+  id: number,
+  title: string,
+  type: string,
+  category: string,
+  amount: number,
+  createdAt: string
+}
+
 export function TransactionsTable() {
+
+  const [transactions, setTransactions] = useState<Transaction[]>([])
+
   useEffect(() => {
-    api('http://localhost:3000/api/transactions')
-      .then(data => console.log(data))
+    api.get('http://localhost:3000/api/transactions')
+      .then(response => setTransactions(response.data.transactions))
   }, [])
   return (
     <Container>
@@ -19,18 +31,15 @@ export function TransactionsTable() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Desenvolvimento</td>
-            <td>R$12000,00</td>
-            <td>Desenvolvimento</td>
-            <td>20/02/2021</td>
+          {transactions.map(transaction => (
+            <tr key={transaction.id }>
+              <td>{transaction.title}</td>
+              <td className={transaction.type}>R${transaction.amount}</td>
+              <td>{transaction.category}</td>
+            <td>{transaction.createdAt}</td>
           </tr>
-          <tr>
-            <td>Pagamento</td>
-            <td>R$12000,00</td>
-            <td>Pagamento</td>
-            <td>20/02/2021</td>
-          </tr>
+          ))}
+
         </tbody>
       </table>
     </Container>
