@@ -15,7 +15,7 @@ type TransactionInputDTO = Omit<Transaction, 'id' | 'createdAt'>
 
 interface TransactionContextData {
   transactions: Array<Transaction>,
-  createTransaction(transaction: TransactionInputDTO): void
+  createTransaction(transaction: TransactionInputDTO): Promise<void>
 }
 
 interface TransactionsProviderProps {
@@ -29,12 +29,19 @@ export function TransactionsProvider({children}: TransactionsProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([])
 
   useEffect(() => {
-    api.get('http://localhost:3000/api/transactions')
+    api.get('transactions')
       .then(response => setTransactions(response.data.transactions))
   }, [])
 
-  function createTransaction(transaction: TransactionInputDTO):void {
-    api.post('/transactions', transaction )
+  async function createTransaction(transactionInput: TransactionInputDTO):Promise<void> {
+    const response = await api.post('transactions', transactionInput )    
+    const newTransaction = response.data.transaction
+
+    setTransactions([
+      ...transactions,
+      newTransaction
+    ])
+
   }
 
   return(
